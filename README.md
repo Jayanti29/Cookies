@@ -12,15 +12,25 @@
 
 **COOKIES is a consumer digital-safety platform that helps ordinary users check suspicious websites, links, messages, job offers, QR codes, and digital content before they click, pay, or respond.**
 
-### 🚀 Live Deployments
+<br/>
 
-| Component | Status | Production Link |
-|-----------|--------|-----------------|
-| 🌐 **Frontend Web App** | ✅ Active | [https://frontend-phi-three-4q9jpgst6a.vercel.app](https://frontend-phi-three-4q9jpgst6a.vercel.app) |
-| ⚡ **Backend API** | ✅ Active | [https://cookies-api-chi.vercel.app](https://cookies-api-chi.vercel.app) |
-| 📊 **API Health Endpoint** | ✅ 200 OK | [https://cookies-api-chi.vercel.app/health](https://cookies-api-chi.vercel.app/health) |
+### 🌟 Click to Open Web App
 
-[Live Demo](https://frontend-phi-three-4q9jpgst6a.vercel.app) · [Features](#features) · [Quick Start](#quick-start) · [Architecture](#architecture) · [Contributing](#contributing)
+[![Open Live App](https://img.shields.io/badge/▶_OPEN_LIVE_APP-COOKIES_Web_Application-059669?style=for-the-badge&logo=vercel&logoColor=white)](https://frontend-phi-three-4q9jpgst6a.vercel.app)
+
+👉 **[https://frontend-phi-three-4q9jpgst6a.vercel.app](https://frontend-phi-three-4q9jpgst6a.vercel.app)** *(Click to start using COOKIES instantly)*
+
+<br/>
+
+### 🚀 Production Deployments
+
+| Component | Status | URL |
+| :--- | :--- | :--- |
+| 🌐 **Frontend Web Application** | 🟢 **Live & Working** | [https://frontend-phi-three-4q9jpgst6a.vercel.app](https://frontend-phi-three-4q9jpgst6a.vercel.app) |
+| ⚡ **Backend API Server** | 🟢 **Live & Integrated** | [https://cookies-api-chi.vercel.app](https://cookies-api-chi.vercel.app) |
+| 🩺 **Backend Health Endpoint** | 🟢 **200 OK** | [https://cookies-api-chi.vercel.app/health](https://cookies-api-chi.vercel.app/health) |
+
+[Open App](https://frontend-phi-three-4q9jpgst6a.vercel.app) · [Features](#features) · [Quick Start](#quick-start) · [Architecture](#architecture) · [Contributing](#contributing)
 
 </div>
 
