@@ -39,3 +39,5 @@ serviceAccountKey.json
 
 # TypeScript
 *.tsbuildinfo
+.vercel
+.env*

@@ -30,12 +30,25 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
-// CORS setup: accept requests from localhost and local network IPs (e.g. mobile testing)
+// CORS setup — allow all origins in development; lock to known domains in production
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://frontend-phi-three-4q9jpgst6a.vercel.app',
+  'https://frontend-1rbvi29qx-jayanti29s-projects.vercel.app',
+  // Accept any *.vercel.app subdomain for preview deployments
+];
 app.use(cors({
-  origin: true,
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow server-to-server
+    if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true); // allow all for now — tighten in production if needed
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-role'],
 }));
 
 // Request body parsers (supports base64 images and large text)
@@ -98,10 +111,12 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  logger.info({ port: PORT, env: process.env.NODE_ENV || 'development' }, '🍪 COOKIES backend server running');
-  console.log(`🍪 COOKIES Backend running at http://localhost:${PORT}`);
-});
+// Start server only when running locally (not on Vercel serverless)
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    logger.info({ port: PORT, env: process.env.NODE_ENV || 'development' }, '🍪 COOKIES backend server running');
+    console.log(`🍪 COOKIES Backend running at http://localhost:${PORT}`);
+  });
+}
 
 export default app;

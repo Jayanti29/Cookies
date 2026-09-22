@@ -6,7 +6,7 @@ import { Link2, Image, FileText, Type, Camera, ArrowLeft } from 'lucide-react';
 
 export const UniversalChecker: React.FC = () => {
   const navigate = useNavigate();
-  const { loading, analyzeWebsite, analyzeMessage, analyzeFile } = useAnalysis();
+  const { loading, error, analyzeWebsite, analyzeMessage, analyzeFile } = useAnalysis();
 
   const [mode, setMode] = useState<'options' | 'link' | 'text' | 'image' | 'doc'>('options');
   const [inputValue, setInputValue] = useState('');
@@ -38,6 +38,19 @@ export const UniversalChecker: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-center justify-between animate-in fade-in">
+          <span>{error}</span>
+          <button
+            onClick={() => setInputValue('')}
+            className="text-xs font-bold text-rose-700 underline ml-3"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
 
       {/* 5 Main Touch Cards */}
       {mode === 'options' && (

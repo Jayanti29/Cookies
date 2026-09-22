@@ -9,7 +9,7 @@ import { ArrowLeft, Camera as CameraIcon, Image, Shield, Zap } from 'lucide-reac
 export const Camera: React.FC = () => {
   const navigate = useNavigate();
   const { videoRef, isActive, hasPermission, error, startCamera, stopCamera, captureFrame } = useCamera();
-  const { loading, analyzeFile } = useAnalysis();
+  const { loading, error: analysisError, analyzeFile } = useAnalysis();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nativeCameraRef = useRef<HTMLInputElement>(null);
 
@@ -20,18 +20,19 @@ export const Camera: React.FC = () => {
     };
   }, [startCamera, stopCamera]);
 
-  const handleCapture = () => {
+  const handleCapture = async () => {
     if (isActive) {
       const frameBase64 = captureFrame();
       if (frameBase64) {
-        // Convert base64 data URL to Blob/File
-        fetch(frameBase64)
-          .then((res) => res.blob())
-          .then((blob) => {
-            const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
-            analyzeFile(file, 'image');
-          });
-        return;
+        try {
+          const res = await fetch(frameBase64);
+          const blob = await res.blob();
+          const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+          await analyzeFile(file, 'image');
+          return;
+        } catch (fetchErr) {
+          console.error('Frame conversion failed:', fetchErr);
+        }
       }
     }
     // Fallback directly to native device camera app
@@ -67,6 +68,13 @@ export const Camera: React.FC = () => {
           Live Guard
         </button>
       </div>
+
+      {/* Analysis Error Alert */}
+      {analysisError && (
+        <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center justify-between">
+          <span>{analysisError}</span>
+        </div>
+      )}
 
       {/* Privacy Notice */}
       <div className="flex justify-center">

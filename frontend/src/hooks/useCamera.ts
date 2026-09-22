@@ -11,16 +11,25 @@ export function useCamera() {
     try {
       setError(null);
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setError('Direct video stream is restricted by your browser on insecure origins. Use the photo capture button below.');
+        setError('Direct video stream is restricted by your browser. Use the photo capture or file upload buttons below.');
         setHasPermission(false);
         setIsActive(false);
         return;
       }
 
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: false,
-      });
+      let mediaStream: MediaStream;
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false,
+        });
+      } catch {
+        // Fallback to any available video input without strict constraints
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+      }
 
       setStream(mediaStream);
       setIsActive(true);
@@ -28,11 +37,18 @@ export function useCamera() {
 
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
-        videoRef.current.play();
+        videoRef.current.setAttribute('playsinline', 'true');
+        videoRef.current.setAttribute('autoplay', 'true');
+        videoRef.current.muted = true;
+        try {
+          await videoRef.current.play();
+        } catch (playErr) {
+          console.warn('Video play interrupted or autoplay blocked:', playErr);
+        }
       }
     } catch (err: any) {
       console.error('Camera error:', err);
-      setError(err.name === 'NotAllowedError' ? 'Camera permission was not granted.' : 'Camera unavailable on this device.');
+      setError(err.name === 'NotAllowedError' ? 'Camera permission was not granted. Please allow camera access in browser settings.' : 'Camera stream unavailable. Please use the capture button or photo upload below.');
       setHasPermission(false);
       setIsActive(false);
     }
