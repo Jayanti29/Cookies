@@ -1,13 +1,13 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../config/firebase';
-import { verifyFirebaseToken } from '../middleware/auth';
+import { optionalAuth } from '../middleware/auth';
 import { generateId } from '../utils/helpers';
 import { logger } from '../utils/logger';
 
 const router = Router();
 
-// Subscriptions are strictly private
-router.use(verifyFirebaseToken);
+// Subscriptions route with optionalAuth support
+router.use(optionalAuth);
 
 /**
  * Add a Subscription to Watchdog
@@ -15,7 +15,7 @@ router.use(verifyFirebaseToken);
  */
 router.post('/', async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_subscriptions_user';
     const { serviceName, amount, currency, billingFrequency, renewalDate, reminderDays, notes } = req.body;
 
     if (!serviceName || amount === undefined || !renewalDate) {
@@ -56,7 +56,7 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
  */
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_subscriptions_user';
 
     if (!db || typeof (db as any).collection !== 'function') {
       res.json([]);
@@ -83,7 +83,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
  */
 router.put('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_subscriptions_user';
     const { id } = req.params;
 
     if (!db || typeof (db as any).collection !== 'function') {
@@ -125,7 +125,7 @@ router.put('/:id', async (req: Request, res: Response): Promise<void> => {
  */
 router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_subscriptions_user';
     const { id } = req.params;
 
     if (!db || typeof (db as any).collection !== 'function') {

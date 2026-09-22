@@ -10,6 +10,13 @@ export function useCamera() {
   const startCamera = useCallback(async () => {
     try {
       setError(null);
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setError('Direct video stream is restricted by your browser on insecure origins. Use the photo capture button below.');
+        setHasPermission(false);
+        setIsActive(false);
+        return;
+      }
+
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
         audio: false,
@@ -25,7 +32,7 @@ export function useCamera() {
       }
     } catch (err: any) {
       console.error('Camera error:', err);
-      setError(err.name === 'NotAllowedError' ? 'Permission denied' : 'Camera unavailable');
+      setError(err.name === 'NotAllowedError' ? 'Camera permission was not granted.' : 'Camera unavailable on this device.');
       setHasPermission(false);
       setIsActive(false);
     }

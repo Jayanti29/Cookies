@@ -11,6 +11,7 @@ export const Camera: React.FC = () => {
   const { videoRef, isActive, hasPermission, error, startCamera, stopCamera, captureFrame } = useCamera();
   const { loading, analyzeFile } = useAnalysis();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const nativeCameraRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     startCamera();
@@ -20,19 +21,24 @@ export const Camera: React.FC = () => {
   }, [startCamera, stopCamera]);
 
   const handleCapture = () => {
-    const frameBase64 = captureFrame();
-    if (frameBase64) {
-      // Convert base64 data URL to Blob/File
-      fetch(frameBase64)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
-          analyzeFile(file, 'image');
-        });
+    if (isActive) {
+      const frameBase64 = captureFrame();
+      if (frameBase64) {
+        // Convert base64 data URL to Blob/File
+        fetch(frameBase64)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+            analyzeFile(file, 'image');
+          });
+        return;
+      }
     }
+    // Fallback directly to native device camera app
+    nativeCameraRef.current?.click();
   };
 
-  const handleGalleryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       analyzeFile(e.target.files[0], 'image');
     }
@@ -99,12 +105,23 @@ export const Camera: React.FC = () => {
             <p className="text-sm font-medium text-stone-300">
               {error || 'Camera permission required to scan.'}
             </p>
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition"
-            >
-              Upload from Gallery Instead
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2.5 w-full max-w-xs">
+              <button
+                type="button"
+                onClick={() => nativeCameraRef.current?.click()}
+                className="flex-1 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs"
+              >
+                <CameraIcon className="w-4 h-4" />
+                <span>Open Device Camera</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex-1 py-3 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-semibold transition"
+              >
+                Choose Photo
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -146,12 +163,22 @@ export const Camera: React.FC = () => {
         </button>
       </div>
 
+      {/* Native Hardware Camera capture input */}
+      <input
+        ref={nativeCameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handlePhotoUpload}
+        className="hidden"
+      />
+
       {/* Hidden file input for gallery */}
       <input
         ref={fileInputRef}
         type="file"
         accept="image/*"
-        onChange={handleGalleryUpload}
+        onChange={handlePhotoUpload}
         className="hidden"
       />
     </div>

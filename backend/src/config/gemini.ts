@@ -14,7 +14,7 @@ function initGemini(): void {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     geminiModel = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       generationConfig: {
         temperature: 0.2,
         topP: 0.8,
@@ -22,7 +22,7 @@ function initGemini(): void {
         maxOutputTokens: 4096,
       },
     });
-    logger.info({ service: 'gemini', model: 'gemini-1.5-flash' }, 'Gemini AI client initialized');
+    logger.info({ service: 'gemini', model: 'gemini-2.5-flash' }, 'Gemini AI client initialized');
   } catch (err) {
     logger.error({ service: 'gemini', error: String(err) }, 'Gemini initialization error');
   }

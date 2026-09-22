@@ -2,11 +2,12 @@ import axios from 'axios';
 import { auth } from '../config/firebase';
 import { AnalysisResult } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const defaultHost = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+const API_BASE_URL = import.meta.env.VITE_API_URL || `http://${defaultHost}:3001`;
 
 export const apiClient = axios.create({
   baseURL: `${API_BASE_URL}/api`,
-  timeout: 30000,
+  timeout: 45000,
 });
 
 // Attach Firebase auth token to requests if available

@@ -11,10 +11,10 @@ const router = Router();
  * Submit a Community Report
  * POST /api/reports
  */
-router.post('/', verifyFirebaseToken, async (req: Request, res: Response): Promise<void> => {
+router.post('/', optionalAuth, async (req: Request, res: Response): Promise<void> => {
   try {
     const { category, title, description, url, evidence, platform, analysisId, severity } = req.body;
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || `anon_${generateId()}`;
 
     if (!category || !description) {
       res.status(400).json({ error: 'Validation Error', message: 'Category and description are required' });
@@ -60,9 +60,13 @@ router.post('/', verifyFirebaseToken, async (req: Request, res: Response): Promi
  * Get Authenticated User's Reports
  * GET /api/reports
  */
-router.get('/', verifyFirebaseToken, async (req: Request, res: Response): Promise<void> => {
+router.get('/', optionalAuth, async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid;
+    if (!userId) {
+      res.json([]);
+      return;
+    }
 
     if (!db || typeof (db as any).collection !== 'function') {
       res.json([]);

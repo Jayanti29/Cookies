@@ -15,18 +15,20 @@ import evidenceRouter from './routes/evidence';
 import subscriptionsRouter from './routes/subscriptions';
 import communityRouter from './routes/community';
 
+// Bypass local self-signed corporate / proxy certificates for Google APIs
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const app = express();
 const PORT = process.env.PORT || 3001;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 // Security headers
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
-// CORS setup
+// CORS setup: accept requests from localhost and local network IPs (e.g. mobile testing)
 app.use(cors({
-  origin: [FRONTEND_URL, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

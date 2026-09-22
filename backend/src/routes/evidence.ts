@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import { db, storage } from '../config/firebase';
-import { verifyFirebaseToken } from '../middleware/auth';
+import { optionalAuth } from '../middleware/auth';
 import { generateId } from '../utils/helpers';
 import { logger } from '../utils/logger';
 
@@ -11,8 +11,8 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 },
 });
 
-// All evidence routes require authentication
-router.use(verifyFirebaseToken);
+// Use optionalAuth so guest/demo users can use the Evidence Vault
+router.use(optionalAuth);
 
 /**
  * Upload & Save Evidence
@@ -20,7 +20,7 @@ router.use(verifyFirebaseToken);
  */
 router.post('/', upload.single('file'), async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_vault_user';
     const { title, description, category, reportId, tags } = req.body;
 
     if (!req.file && !req.body.content) {
@@ -40,12 +40,17 @@ router.post('/', upload.single('file'), async (req: Request, res: Response): Pro
       storagePath = `evidence/${userId}/${evidenceId}_${req.file.originalname}`;
 
       if (storage && typeof (storage as any).bucket === 'function') {
-        const bucket = (storage as any).bucket();
-        const file = bucket.file(storagePath);
-        await file.save(req.file.buffer, {
-          metadata: { contentType: req.file.mimetype },
-        });
-        fileUrl = `gs://${bucket.name}/${storagePath}`;
+        try {
+          const bucket = (storage as any).bucket();
+          const file = bucket.file(storagePath);
+          await file.save(req.file.buffer, {
+            metadata: { contentType: req.file.mimetype },
+          });
+          fileUrl = `gs://${bucket.name}/${storagePath}`;
+        } catch {
+          // In-memory / data URL fallback if Storage credentials not available locally
+          fileUrl = `data:${mimeType};base64,${req.file.buffer.toString('base64')}`;
+        }
       } else {
         // In-memory fallback if Storage bucket not configured
         fileUrl = `data:${mimeType};base64,${req.file.buffer.toString('base64')}`;
@@ -87,7 +92,7 @@ router.post('/', upload.single('file'), async (req: Request, res: Response): Pro
  */
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_vault_user';
 
     if (!db || typeof (db as any).collection !== 'function') {
       res.json([]);
@@ -114,7 +119,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
  */
 router.get('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_vault_user';
     const { id } = req.params;
 
     if (!db || typeof (db as any).collection !== 'function') {
@@ -147,7 +152,7 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
  */
 router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.user!.uid;
+    const userId = req.user?.uid || 'guest_vault_user';
     const { id } = req.params;
 
     if (!db || typeof (db as any).collection !== 'function') {

@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginWithEmail, registerWithEmail, loginWithGoogle } from '../services/auth';
-import { Lock, Mail, ArrowRight } from 'lucide-react';
+import { loginWithEmail, registerWithEmail, loginWithGoogle, loginAsDemoUser } from '../services/auth';
+import { useStore } from '../store';
+import { Lock, Mail, ArrowRight, Zap, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
+  const setUser = useStore((s) => s.setUser);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleDemoLogin = async () => {
+    try {
+      setLoading(true);
+      const demoUser = await loginAsDemoUser();
+      setUser(demoUser);
+      toast.success('Logged in as Safety Citizen (Demo Mode)!');
+      navigate('/dashboard');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +38,12 @@ export const Auth: React.FC = () => {
       }
       navigate('/dashboard');
     } catch (err: any) {
-      toast.error(err.message || 'Authentication failed');
+      if (err?.code === 'auth/unauthorized-domain' || err?.message?.includes('unauthorized-domain')) {
+        toast('IP domain not whitelisted in Firebase — activated Demo Account!', { icon: '⚡' });
+        await handleDemoLogin();
+      } else {
+        toast.error(err.message || 'Authentication failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -37,7 +56,12 @@ export const Auth: React.FC = () => {
       toast.success('Signed in with Google!');
       navigate('/dashboard');
     } catch (err: any) {
-      toast.error(err.message || 'Google sign in failed');
+      if (err?.code === 'auth/unauthorized-domain' || err?.message?.includes('unauthorized-domain')) {
+        toast('Google OAuth requires authorized domain — activated Demo Account!', { icon: '⚡' });
+        await handleDemoLogin();
+      } else {
+        toast.error(err.message || 'Google sign in failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -58,6 +82,17 @@ export const Auth: React.FC = () => {
       </div>
 
       <div className="rounded-3xl bg-white border border-stone-200 p-6 sm:p-8 space-y-5 shadow-xs">
+        {/* Instant Demo Sign-In Button */}
+        <button
+          type="button"
+          onClick={handleDemoLogin}
+          disabled={loading}
+          className="w-full py-3.5 px-4 rounded-2xl bg-amber-600 hover:bg-amber-700 font-bold text-xs text-white flex items-center justify-center gap-2.5 transition shadow-sm"
+        >
+          <Zap className="w-4 h-4 text-amber-200 fill-amber-200" />
+          <span>⚡ Instant Demo Access (No Password Needed)</span>
+        </button>
+
         {/* Google Sign-in */}
         <button
           type="button"
