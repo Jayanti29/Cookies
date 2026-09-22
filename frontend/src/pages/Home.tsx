@@ -2,12 +2,52 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ActionCard } from '../components/ActionCard';
 import { useLanguage } from '../i18n';
-import { Globe, Camera, QrCode, Briefcase, MessageSquare, AlertTriangle, ShieldCheck } from 'lucide-react';
+import {
+  Globe,
+  Camera,
+  QrCode,
+  Briefcase,
+  MessageSquare,
+  AlertTriangle,
+  ShieldCheck,
+  Cookie,
+  ArrowRight,
+  Sparkles,
+  Gamepad2,
+  ShieldAlert,
+  CreditCard,
+  MousePointerClick,
+  FileCheck,
+  Send,
+  Lock,
+} from 'lucide-react';
 
 export const Home: React.FC = () => {
   const { t } = useLanguage();
 
+  const oneTapActions = [
+    { label: 'PAY', icon: '💳', to: '/checkout-diff', desc: 'Spot checkout price shifts & sneaky add-ons' },
+    { label: 'CLICK', icon: '🔗', to: '/check/qr', desc: 'Verify destination links & QR codes' },
+    { label: 'ACCEPT', icon: '🍪', to: '/cookie-truth', desc: 'Audit cookie banners & tracking consent' },
+    { label: 'SIGN', icon: '📄', to: '/check/job', desc: 'Scan contracts, job offers & agreements' },
+    { label: 'RESPOND', icon: '💬', to: '/check/message', desc: 'Screen suspicious SMS, emails & DMs' },
+  ];
+
   const actionCards = [
+    {
+      to: '/cookie-truth',
+      icon: Cookie,
+      title: 'Cookie Truth Scanner',
+      description: 'Audit observable cookies, banner biases, and generate Digital Consent Receipts.',
+      badge: 'Signature',
+    },
+    {
+      to: '/checkout-diff',
+      icon: Sparkles,
+      title: 'Checkout Difference',
+      description: 'Compare ad screenshot vs checkout total to spot sneaky price increases.',
+      badge: 'Multimodal',
+    },
     {
       to: '/check/website',
       icon: Globe,
@@ -22,12 +62,6 @@ export const Home: React.FC = () => {
       badge: 'Camera',
     },
     {
-      to: '/check/qr',
-      icon: QrCode,
-      title: t('home.checkLink') || 'Check Link / QR',
-      description: t('home.checkLinkDesc') || 'Check a link or QR before opening it.',
-    },
-    {
       to: '/check/job',
       icon: Briefcase,
       title: t('home.checkJob') || 'Check Job Offer',
@@ -39,61 +73,112 @@ export const Home: React.FC = () => {
       title: t('home.checkMessage') || 'Check Message',
       description: t('home.checkMessageDesc') || 'Check suspicious SMS, email, WhatsApp or social-media messages.',
     },
-    {
-      to: '/reports/new',
-      icon: AlertTriangle,
-      title: t('home.report') || 'Report Something',
-      description: t('home.reportDesc') || 'Report suspicious digital activity to protect others.',
-    },
   ];
 
   return (
     <div className="space-y-12 py-4 sm:py-8 animate-in fade-in duration-300">
       {/* Hero Section */}
-      <section className="text-center max-w-2xl mx-auto space-y-6 pt-4 sm:pt-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold tracking-wide uppercase">
+      <section className="text-center max-w-3xl mx-auto space-y-6 pt-4 sm:pt-6">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold tracking-wide uppercase">
           <span>🍪</span>
-          <span>Consumer Digital Safety</span>
+          <span>DIGITAL CONSUMER PROTECTION & CONSENT INTELLIGENCE</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-[1.1]">
-          {t('home.tagline') || 'Check Before You Trust.'}
-        </h1>
+        <div className="space-y-3">
+          <p className="text-sm sm:text-base font-bold text-amber-800 uppercase tracking-wider">
+            What are you really agreeing to?
+          </p>
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-[1.1]">
+            COOKIES checks what a website wants from you — your MONEY, your DATA, or BOTH.
+          </h1>
+        </div>
 
-        <p className="text-base sm:text-lg text-stone-600 leading-relaxed max-w-xl mx-auto">
-          {t('home.subtitle') ||
-            'Check websites, links, messages, job offers, QR codes and suspicious content before you click, pay or respond.'}
+        <p className="text-sm sm:text-base text-stone-600 leading-relaxed max-w-xl mx-auto">
+          Understand hidden costs, deceptive interfaces, tracking consent, and suspicious digital content before you click, accept, pay or trust.
         </p>
 
+        {/* The 3 Core Dimensions Badges */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-left">
+          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 shadow-xs">
+            <span className="font-extrabold text-xs text-amber-950 flex items-center gap-1.5 uppercase tracking-wider">
+              <span>💰</span>
+              <span>MONEY</span>
+            </span>
+            <p className="text-xs text-amber-900/90 mt-1 leading-relaxed">
+              Financial deception, drip pricing, hidden recurring subscriptions, and checkout fee shifts.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 shadow-xs">
+            <span className="font-extrabold text-xs text-blue-950 flex items-center gap-1.5 uppercase tracking-wider">
+              <span>🔐</span>
+              <span>DATA</span>
+            </span>
+            <p className="text-xs text-blue-900/90 mt-1 leading-relaxed">
+              Tracking consent, asymmetric cookie banners, buried opt-outs, and behavioral profile building.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200/80 shadow-xs">
+            <span className="font-extrabold text-xs text-purple-950 flex items-center gap-1.5 uppercase tracking-wider">
+              <span>🧠</span>
+              <span>ATTENTION</span>
+            </span>
+            <p className="text-xs text-purple-900/90 mt-1 leading-relaxed">
+              Dark patterns, fake countdown urgency, confirmshaming, roach motels, and deceptive friction.
+            </p>
+          </div>
+        </div>
+
         {/* Primary & Secondary CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
           <Link
             to="/check"
             className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-amber-600 hover:bg-amber-700 active:scale-98 text-white font-bold text-base shadow-md transition-all flex items-center justify-center gap-2"
           >
-            <span>{t('home.checkSomething') || '🔍 Check Something'}</span>
+            <span>🔍 Check Something</span>
           </Link>
 
           <Link
-            to="/camera"
-            className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-white hover:bg-stone-50 active:scale-98 border border-stone-200 text-stone-800 font-bold text-base shadow-xs transition-all flex items-center justify-center gap-2"
+            to="/cookie-truth"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-stone-900 hover:bg-black active:scale-98 text-amber-400 font-bold text-base shadow-xs transition-all flex items-center justify-center gap-2 border border-stone-800"
           >
-            <span>{t('home.scanAnything') || '📷 Scan Anything'}</span>
+            <span>🍪 Cookie Truth Scanner</span>
           </Link>
         </div>
-
-        <p className="text-xs text-stone-400 font-medium">
-          {t('home.notSure') || 'Not sure? Just show COOKIES.'}
-        </p>
       </section>
 
-      {/* Main 6 Action Cards Grid */}
+      {/* CHECK BEFORE YOU Section */}
+      <section className="space-y-3 max-w-3xl mx-auto">
+        <h2 className="text-xs font-black uppercase tracking-wider text-stone-400 text-center">
+          Check Before You Act
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+          {oneTapActions.map((act) => (
+            <Link
+              key={act.label}
+              to={act.to}
+              className="p-3.5 rounded-2xl bg-white border border-stone-200 hover:border-amber-400 hover:shadow-xs transition group text-center space-y-1"
+            >
+              <div className="text-2xl">{act.icon}</div>
+              <span className="font-black text-xs text-stone-900 block group-hover:text-amber-800 transition">
+                {act.label}
+              </span>
+              <p className="text-[10px] text-stone-500 line-clamp-2 leading-tight">
+                {act.desc}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Main Feature Cards Grid */}
       <section className="space-y-4">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-xs font-black uppercase tracking-wider text-stone-400">
-            What would you like to verify?
+            Consumer Safety Verification Tools
           </h2>
-          <span className="text-xs text-stone-500 font-medium">One touch verification</span>
+          <span className="text-xs text-stone-500 font-medium">Evidence-based assessment</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -103,33 +188,67 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Additional Tools Banner */}
-      <section className="rounded-3xl bg-white border border-stone-200/80 p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-amber-700 font-bold text-sm">
-            <ShieldCheck className="w-4 h-4" />
-            <span>Interactive Safety Tools</span>
+      {/* Interactive Safety Features (True Cost, Game, Authority Admin) */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Price Journey */}
+        <Link
+          to="/true-cost"
+          className="p-6 rounded-3xl bg-white border border-stone-200 hover:border-amber-400 shadow-xs transition group space-y-2 flex flex-col justify-between"
+        >
+          <div className="space-y-1">
+            <span className="text-xs font-bold text-amber-800 uppercase tracking-wider block">Financial Flow</span>
+            <h3 className="text-lg font-bold text-stone-900 group-hover:text-amber-800 transition">
+              Price Journey
+            </h3>
+            <p className="text-xs text-stone-500 leading-relaxed">
+              Trace advertised price down to product, add-ons, service fees, taxes, and auto-renewals.
+            </p>
           </div>
-          <h3 className="text-xl font-bold text-stone-900">Track subscriptions & calculate true costs</h3>
-          <p className="text-sm text-stone-500 max-w-xl">
-            Reveal hidden recurring charges with our deterministic True Cost Calculator, or monitor renewal dates in Subscription Watchdog.
-          </p>
-        </div>
+          <div className="pt-2 flex items-center gap-1.5 text-xs font-bold text-stone-700 group-hover:text-amber-800">
+            <span>Calculate Price Path</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </Link>
 
-        <div className="flex items-center gap-3 shrink-0">
-          <Link
-            to="/true-cost"
-            className="px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold transition"
-          >
-            True Cost Calculator
-          </Link>
-          <Link
-            to="/subscriptions"
-            className="px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold transition"
-          >
-            Subscriptions
-          </Link>
-        </div>
+        {/* Can You Spot the Trick Game */}
+        <Link
+          to="/game"
+          className="p-6 rounded-3xl bg-white border border-stone-200 hover:border-amber-400 shadow-xs transition group space-y-2 flex flex-col justify-between"
+        >
+          <div className="space-y-1">
+            <span className="text-xs font-bold text-purple-800 uppercase tracking-wider block">Interactive Challenge</span>
+            <h3 className="text-lg font-bold text-stone-900 group-hover:text-purple-800 transition">
+              Can You Spot the Trick?
+            </h3>
+            <p className="text-xs text-stone-500 leading-relaxed">
+              Test your ability to spot manipulative consent prompts, sneak-into-basket add-ons, and confirmshaming.
+            </p>
+          </div>
+          <div className="pt-2 flex items-center gap-1.5 text-xs font-bold text-stone-700 group-hover:text-purple-800">
+            <span>Play Challenge</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </Link>
+
+        {/* Authority & Admin Center */}
+        <Link
+          to="/admin"
+          className="p-6 rounded-3xl bg-stone-900 text-white border border-stone-800 hover:border-stone-700 shadow-xs transition group space-y-2 flex flex-col justify-between"
+        >
+          <div className="space-y-1">
+            <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">Authority Portal</span>
+            <h3 className="text-lg font-bold text-white group-hover:text-amber-300 transition">
+              Admin & Case Center
+            </h3>
+            <p className="text-xs text-stone-400 leading-relaxed">
+              Review community reports, manage case lifecycles, and generate formal consumer protection dossiers.
+            </p>
+          </div>
+          <div className="pt-2 flex items-center gap-1.5 text-xs font-bold text-amber-400 group-hover:text-amber-300">
+            <span>Open Authority Dashboard</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </Link>
       </section>
     </div>
   );

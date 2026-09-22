@@ -135,6 +135,47 @@ export async function runAllTests() {
     assert(totalFirstYear === 3034, 'Total first year must be 3034');
   });
 
+  // ── 6. COOKIE TRUTH & DIGITAL CONSENT RECEIPT ──────────────────────────────
+  console.log('\n📦 Suite 6: Cookie Truth & Consent Intelligence');
+
+  await runTest('CookieTruth', 'Detects asymmetric banner choice and generates verifiable receipt', async () => {
+    const { cookieTruthService } = await import('../services/cookieTruthService');
+    const bannerSample = 'We use cookies to improve your experience. Click Accept All to enable advertising and analytics partners. Or manage preferences.';
+    const res = await cookieTruthService.analyzeCookieConsent(bannerSample, 'https://test-store.in');
+
+    assert(res.categories.length === 4, 'Must evaluate 4 standard cookie categories');
+    assert(res.categories.some(c => c.name === 'essential'), 'Essential cookies must be tracked');
+    assert(!!res.receipt, 'Must generate digital consent receipt');
+    assert(res.receipt?.website === 'test-store.in', 'Receipt must associate with website domain');
+    assert(res.consentFlags.length > 0, 'Must flag asymmetric "Accept All" prompt');
+    assert(!res.summary.includes('steal data'), 'Must avoid hyperbolic "steal data" claims');
+  });
+
+  // ── 7. AUTHORITY / ADMIN CASE MANAGEMENT & AUDIT TRAIL ─────────────────────
+  console.log('\n📦 Suite 7: Authority Case Management & Audit Trail');
+
+  await runTest('Authority', 'Manages case lifecycle, audit logs, and official report generation', async () => {
+    const { adminCaseService } = await import('../services/adminCaseService');
+    const cases = await adminCaseService.getCases();
+    assert(cases.length > 0, 'Must have active cases in system');
+
+    const testCase = cases[0];
+    const updated = await adminCaseService.updateCaseStatus(
+      testCase.id,
+      'VERIFIED',
+      'test_auditor',
+      'Verified domain registration and deceptive checkout artifacts'
+    );
+    assert(updated.status === 'VERIFIED', 'Case status must transition to VERIFIED');
+
+    const report = await adminCaseService.generateOfficialCaseReport(testCase.id);
+    assert(report.documentHeader !== undefined, 'Report must contain formal document header');
+    assert(
+      (report.documentHeader as any).subtitle.includes('external'),
+      'Must designate dossier as prepared for external submission'
+    );
+  });
+
   // ── SUMMARY REPORT ─────────────────────────────────────────────────────────
   console.log('\n══════════════════════════════════════════════════════════════');
   const passed = results.filter(r => r.passed).length;

@@ -18,14 +18,19 @@ Return ONLY valid JSON matching the requested schema — no markdown, no prose, 
 
 const RESPONSE_SCHEMA_DESC = `{
   "status": "safe|info|review|multiple_concerns|high_concern",
-  "category": "string (short label, e.g. 'Phishing Attempt' or 'Dark Pattern')",
+  "category": "string (short label, e.g. 'Dark Pattern' or 'Phishing Attempt')",
   "summary": "string (1-2 plain-language sentences for a general consumer)",
   "findings": [
     {
-      "type": "string (e.g. 'hidden_fee', 'impersonation', 'fake_urgency')",
+      "dimension": "money|data|manipulation",
+      "type": "string (e.g. 'hidden_fee', 'cookie_consent_trap', 'fake_urgency')",
       "severity": "low|medium|high",
       "observedEvidence": "string (exactly what was seen in the content)",
-      "explanation": "string (why it matters)",
+      "interpretation": "string (reasonable inference without speculation)",
+      "whyItMatters": "string (why the consumer should care)",
+      "whatIsUncertain": "string (what cannot be verified from the interface alone)",
+      "whatToVerify": "string (concrete step the consumer can check)",
+      "explanation": "string (1-line overview)",
       "recommendedAction": "string (what the consumer should do)",
       "confidence": 0.85
     }
@@ -148,12 +153,39 @@ export class GeminiService {
       const responseText = result.response.text();
       const parsed = parseGeminiResponse(responseText);
 
+      const rawFindings = (parsed.findings as Finding[]) ?? [];
+      const triSummary = {
+        money: { count: 0, items: [] as string[] },
+        data: { count: 0, items: [] as string[] },
+        manipulation: { count: 0, items: [] as string[] },
+      };
+
+      const findings = rawFindings.map((f) => {
+        let dim = f.dimension;
+        if (!dim) {
+          const t = (f.type || '').toLowerCase();
+          if (t.includes('fee') || t.includes('subscription') || t.includes('price') || t.includes('cost') || t.includes('payment') || t.includes('billing')) {
+            dim = 'money';
+          } else if (t.includes('cookie') || t.includes('tracking') || t.includes('privacy') || t.includes('data') || t.includes('consent')) {
+            dim = 'data';
+          } else {
+            dim = 'manipulation';
+          }
+        }
+        if (triSummary[dim]) {
+          triSummary[dim].count++;
+          triSummary[dim].items.push(f.explanation || f.type);
+        }
+        return { ...f, dimension: dim };
+      });
+
       const analysisResult: AnalysisResult = {
         analysisId: generateId(),
         status: parsed.status ?? AnalysisStatus.Info,
         category: parsed.category ?? 'General Analysis',
         summary: parsed.summary ?? 'Analysis complete.',
-        findings: (parsed.findings as Finding[]) ?? [],
+        findings,
+        triDimensionSummary: triSummary,
         uncertainties: parsed.uncertainties ?? [],
         recommendedActions: parsed.recommendedActions ?? [],
         needsVerification: parsed.needsVerification ?? true,

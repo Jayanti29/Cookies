@@ -16,9 +16,11 @@ export type FindingType =
   | 'qr_redirect'
   | 'generic';
 
+export type DimensionCategory = 'money' | 'data' | 'manipulation';
+
 export interface Finding {
   id: string;
-  type: FindingType;
+  type: FindingType | string;
   severity: SeverityLevel;
   title: string;
   description: string;
@@ -28,6 +30,14 @@ export interface Finding {
   whyItMatters: string;
   whatIsUncertain?: string;
   whatToVerify?: string;
+  dimension?: DimensionCategory;
+  interpretation?: string;
+}
+
+export interface TriDimensionSummary {
+  money: { count: number; items: string[] };
+  data: { count: number; items: string[] };
+  manipulation: { count: number; items: string[] };
 }
 
 export interface AnalysisResult {
@@ -43,6 +53,8 @@ export interface AnalysisResult {
   inputPreview?: string;
   confidence?: number;
   actions?: RecommendedAction[];
+  triDimensionSummary?: TriDimensionSummary;
+  consentReceipt?: ConsentReceipt;
 }
 
 export interface RecommendedAction {
@@ -209,4 +221,151 @@ export interface AnalyzeJobPayload {
 export interface AnalyzePaymentPayload {
   content: string;
   language: string;
+}
+
+// ─── Cookie Truth & Digital Consent Receipt Types ────────────────────────────
+
+export interface CookieCategoryStatus {
+  name: 'essential' | 'analytics' | 'advertising' | 'preferences' | 'third_party';
+  status: 'detected' | 'review' | 'not_detected';
+  observableDetails: string;
+}
+
+export interface ConsentInterfaceFlag {
+  type: string;
+  description: string;
+  severity: 'low' | 'medium' | 'high';
+  observedEvidence: string;
+}
+
+export interface ConsentReceipt {
+  receiptId: string;
+  website: string;
+  timestamp: string;
+  observedChoices: {
+    essential: boolean;
+    analytics: boolean;
+    advertising: boolean;
+    thirdParty: boolean;
+  };
+  observedInterfaceFlags: string[];
+  potentialImpact: string;
+  verificationAdvice: string;
+}
+
+export interface CookieTruthResult {
+  analysisId: string;
+  url?: string;
+  categories: CookieCategoryStatus[];
+  consentFlags: ConsentInterfaceFlag[];
+  summary: string;
+  whyItMatters: string;
+  receipt?: ConsentReceipt;
+  createdAt: string;
+}
+
+// ─── Checkout Difference Types ────────────────────────────────────────────────
+
+export interface PriceDifferenceItem {
+  label: string;
+  amountA?: number | string;
+  amountB?: number | string;
+  type: 'base_price' | 'service_fee' | 'platform_fee' | 'preselected_addon' | 'tax' | 'delivery' | 'renewal_term' | 'other';
+  differenceNote: string;
+}
+
+export interface CheckoutDiffResult {
+  analysisId: string;
+  detectedPriceChange: boolean;
+  advertisedPrice?: string;
+  checkoutPrice?: string;
+  currency?: string;
+  differences: PriceDifferenceItem[];
+  observedDarkPatterns: string[];
+  summary: string;
+  uncertainties: string[];
+  verificationSteps: string[];
+  createdAt: string;
+}
+
+// ─── Authority / Case Management Types ────────────────────────────────────────
+
+export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'MODERATOR' | 'AUTHORITY_REVIEWER' | 'USER';
+
+export type CaseStatus = 
+  | 'NEW'
+  | 'UNDER_REVIEW'
+  | 'MORE_INFORMATION_REQUIRED'
+  | 'VERIFIED'
+  | 'ESCALATED'
+  | 'RESOLVED'
+  | 'REJECTED';
+
+export type CasePriority = 'low' | 'medium' | 'high' | 'critical';
+
+export interface CaseAction {
+  id: string;
+  actionType: string;
+  performedBy: string;
+  performedAt: string;
+  notes: string;
+  previousStatus?: string;
+  newStatus?: string;
+}
+
+export interface AuthorityCase {
+  id: string;
+  reportId: string;
+  websiteDomain: string;
+  category: string;
+  priority: CasePriority;
+  status: CaseStatus;
+  assignedTo?: string;
+  assignedRole?: UserRole;
+  reporterAnonymousId: string;
+  title: string;
+  description: string;
+  evidenceList: string[];
+  triDimensionSummary?: TriDimensionSummary;
+  communityVotes: {
+    experienced: number;
+    possibly: number;
+    does_not_match: number;
+  };
+  aiFindingsSummary: string;
+  internalNotes: Array<{ id: string; author: string; text: string; createdAt: string }>;
+  actionHistory: CaseAction[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AuditLog {
+  id: string;
+  timestamp: string;
+  userId: string;
+  userRole: string;
+  action: string;
+  targetType: 'case' | 'report' | 'evidence' | 'user' | 'system';
+  targetId: string;
+  details: string;
+  ipAddress?: string;
+}
+
+// ─── AI Chatbot Assistant Types ───────────────────────────────────────────────
+
+export interface ChatRequest {
+  message: string;
+  context?: {
+    currentAnalysis?: Partial<AnalysisResult>;
+    url?: string;
+    language?: string;
+  };
+  language?: string;
+}
+
+export interface ChatResponse {
+  reply: string;
+  citedEvidence?: string[];
+  uncertainties?: string[];
+  recommendedVerifications?: string[];
 }

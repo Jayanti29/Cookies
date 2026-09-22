@@ -207,6 +207,42 @@ function createResilientDb(realFirestore: admin.firestore.Firestore | null) {
           };
           return queryObj;
         },
+        orderBy(orderField: string, dir: 'asc' | 'desc' = 'asc') {
+          let items = Array.from(colMap.values());
+          items.sort((a, b) => {
+            const va = a[orderField] || '';
+            const vb = b[orderField] || '';
+            if (dir === 'desc') return va < vb ? 1 : va > vb ? -1 : 0;
+            return va > vb ? 1 : va < vb ? -1 : 0;
+          });
+          const queryObj = {
+            limit(count: number) {
+              items = items.slice(0, count);
+              return queryObj;
+            },
+            async get() {
+              return {
+                docs: items.map((item) => ({ id: item.id, data: () => ({ ...item }) })),
+                size: items.length,
+                forEach(cb: any) { items.forEach((item) => cb({ id: item.id, data: () => ({ ...item }) })); },
+              };
+            },
+          };
+          return queryObj;
+        },
+        limit(count: number) {
+          let items = Array.from(colMap.values()).slice(0, count);
+          const queryObj = {
+            async get() {
+              return {
+                docs: items.map((item) => ({ id: item.id, data: () => ({ ...item }) })),
+                size: items.length,
+                forEach(cb: any) { items.forEach((item) => cb({ id: item.id, data: () => ({ ...item }) })); },
+              };
+            },
+          };
+          return queryObj;
+        },
         async get() {
           if (realFirestore) {
             try {

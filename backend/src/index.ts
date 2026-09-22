@@ -14,6 +14,10 @@ import reportsRouter from './routes/reports';
 import evidenceRouter from './routes/evidence';
 import subscriptionsRouter from './routes/subscriptions';
 import communityRouter from './routes/community';
+import cookieTruthRouter from './routes/cookieTruth';
+import checkoutDiffRouter from './routes/checkoutDiff';
+import cookiesAiRouter from './routes/cookiesAi';
+import adminRouter from './routes/admin';
 
 // Bypass local self-signed corporate / proxy certificates for Google APIs
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -72,6 +76,10 @@ app.use('/api/reports', reportsRouter);
 app.use('/api/evidence', evidenceRouter);
 app.use('/api/subscriptions', subscriptionsRouter);
 app.use('/api/community', communityRouter);
+app.use('/api/cookie-truth', cookieTruthRouter);
+app.use('/api/checkout-diff', checkoutDiffRouter);
+app.use('/api/ai', cookiesAiRouter);
+app.use('/api/admin', adminRouter);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

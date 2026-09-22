@@ -25,6 +25,11 @@ import { Learn } from './pages/Learn';
 import { Community } from './pages/Community';
 import { Profile } from './pages/Profile';
 import { Auth } from './pages/Auth';
+import { CookieTruthScanner } from './pages/CookieTruthScanner';
+import { CheckoutDiff } from './pages/CheckoutDiff';
+import { DarkPatternGame } from './pages/DarkPatternGame';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { CookiesAiAssistant } from './components/CookiesAiAssistant';
 
 export function App() {
   return (
@@ -33,6 +38,10 @@ export function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/cookie-truth" element={<CookieTruthScanner />} />
+            <Route path="/checkout-diff" element={<CheckoutDiff />} />
+            <Route path="/game" element={<DarkPatternGame />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/check" element={<UniversalChecker />} />
             <Route path="/check/website" element={<WebsiteScanner />} />
             <Route path="/check/message" element={<MessageChecker />} />
@@ -54,6 +63,8 @@ export function App() {
             <Route path="/auth" element={<Auth />} />
           </Routes>
         </Layout>
+        {/* Persistent AI Digital Safety Assistant */}
+        <CookiesAiAssistant />
         <Toaster position="top-center" toastOptions={{ duration: 3500 }} />
       </Router>
     </LanguageProvider>

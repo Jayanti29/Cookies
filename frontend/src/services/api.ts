@@ -26,12 +26,26 @@ apiClient.interceptors.request.use(async (config) => {
 
 // Normalizes backend AnalysisResult into frontend expected schema
 function normalizeAnalysisResult(data: any): AnalysisResult {
-  return {
-    id: data.analysisId || data.id || Math.random().toString(36).substring(7),
-    status: data.status || 'review',
-    summary: data.summary || 'Analysis complete.',
-    analysisType: data.category || 'website',
-    findings: (data.findings || []).map((f: any, idx: number) => ({
+  const rawFindings = data.findings || [];
+  const triSummary = data.triDimensionSummary || {
+    money: { count: 0, items: [] },
+    data: { count: 0, items: [] },
+    manipulation: { count: 0, items: [] },
+  };
+
+  const findings = rawFindings.map((f: any, idx: number) => {
+    let dim = f.dimension;
+    if (!dim) {
+      const t = (f.type || '').toLowerCase();
+      if (t.includes('fee') || t.includes('subscription') || t.includes('price') || t.includes('cost') || t.includes('payment')) {
+        dim = 'money';
+      } else if (t.includes('cookie') || t.includes('tracking') || t.includes('privacy') || t.includes('data')) {
+        dim = 'data';
+      } else {
+        dim = 'manipulation';
+      }
+    }
+    return {
       id: String(idx),
       type: f.type || 'generic',
       severity: f.severity || 'medium',
@@ -40,11 +54,23 @@ function normalizeAnalysisResult(data: any): AnalysisResult {
       evidence: f.observedEvidence || '',
       explanation: f.explanation || '',
       recommendation: f.recommendedAction || '',
-      whyItMatters: f.explanation || '',
-      whatIsUncertain: (data.uncertainties && data.uncertainties[0]) || '',
-      whatToVerify: f.recommendedAction || '',
-    })),
-    totalFindings: (data.findings || []).length,
+      whyItMatters: f.whyItMatters || f.explanation || 'May impact your privacy or billing transparency.',
+      whatIsUncertain: f.whatIsUncertain || (data.uncertainties && data.uncertainties[0]) || 'Internal website data collection cannot be verified from client UI alone.',
+      whatToVerify: f.whatToVerify || f.recommendedAction || 'Review website terms and privacy policy before accepting.',
+      dimension: dim,
+      interpretation: f.interpretation || f.explanation || '',
+    };
+  });
+
+  return {
+    id: data.analysisId || data.id || Math.random().toString(36).substring(7),
+    status: data.status || 'review',
+    summary: data.summary || 'Analysis complete.',
+    analysisType: data.category || 'website',
+    findings,
+    triDimensionSummary: triSummary,
+    consentReceipt: data.consentReceipt,
+    totalFindings: findings.length,
     isDemo: Boolean(data.isDemo),
     checkedAt: data.createdAt || new Date().toISOString(),
     language: data.language || 'en',
@@ -163,6 +189,95 @@ export const api = {
 
   async getWebsiteProfile(domain: string): Promise<any> {
     const response = await apiClient.get(`/community/website/${domain}`);
+    return response.data;
+  },
+
+  // Cookie Truth Scanner
+  async analyzeCookieConsent(content: string, url?: string, language: string = 'en'): Promise<any> {
+    const response = await apiClient.post('/cookie-truth/analyze', { content, url, language });
+    return response.data;
+  },
+
+  async generateConsentReceipt(website: string, categories: any[], flags: any[]): Promise<any> {
+    const response = await apiClient.post('/cookie-truth/receipt', { website, categories, flags });
+    return response.data;
+  },
+
+  // Checkout Difference Detector
+  async compareCheckouts(formData: FormData): Promise<any> {
+    const response = await apiClient.post('/checkout-diff', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
+
+  // COOKIES AI Assistant
+  async askCookiesAi(message: string, context?: any, language: string = 'en'): Promise<any> {
+    const response = await apiClient.post('/ai/chat', { message, context, language });
+    return response.data;
+  },
+
+  // Authority & Admin Case Management
+  async getAdminOverview(role: string = 'ADMIN'): Promise<any> {
+    const response = await apiClient.get('/admin/overview', {
+      headers: { 'x-admin-role': role },
+    });
+    return response.data;
+  },
+
+  async getAdminCases(status?: string, priority?: string, role: string = 'ADMIN'): Promise<any[]> {
+    const response = await apiClient.get('/admin/cases', {
+      params: { status, priority },
+      headers: { 'x-admin-role': role },
+    });
+    return response.data;
+  },
+
+  async getAdminCase(id: string, role: string = 'ADMIN'): Promise<any> {
+    const response = await apiClient.get(`/admin/cases/${id}`, {
+      headers: { 'x-admin-role': role },
+    });
+    return response.data;
+  },
+
+  async updateAdminCaseStatus(id: string, status: string, notes?: string, role: string = 'ADMIN'): Promise<any> {
+    const response = await apiClient.patch(
+      `/admin/cases/${id}/status`,
+      { status, notes },
+      { headers: { 'x-admin-role': role } }
+    );
+    return response.data;
+  },
+
+  async recordAdminAction(id: string, actionType: string, notes?: string, role: string = 'ADMIN'): Promise<any> {
+    const response = await apiClient.post(
+      `/admin/cases/${id}/action`,
+      { actionType, notes },
+      { headers: { 'x-admin-role': role } }
+    );
+    return response.data;
+  },
+
+  async addAdminNote(id: string, text: string, role: string = 'ADMIN'): Promise<any> {
+    const response = await apiClient.post(
+      `/admin/cases/${id}/note`,
+      { text },
+      { headers: { 'x-admin-role': role } }
+    );
+    return response.data;
+  },
+
+  async getAdminOfficialReport(id: string, role: string = 'ADMIN'): Promise<any> {
+    const response = await apiClient.get(`/admin/cases/${id}/report`, {
+      headers: { 'x-admin-role': role },
+    });
+    return response.data;
+  },
+
+  async getAdminAuditLogs(role: string = 'ADMIN'): Promise<any[]> {
+    const response = await apiClient.get('/admin/audit-logs', {
+      headers: { 'x-admin-role': role },
+    });
     return response.data;
   },
 };

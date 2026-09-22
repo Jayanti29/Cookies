@@ -12,11 +12,14 @@ export const TopNav: React.FC = () => {
 
   const navLinks = [
     { to: '/', label: t('nav.home') || 'Home' },
+    { to: '/cookie-truth', label: 'Cookie Truth' },
+    { to: '/checkout-diff', label: 'Checkout Diff' },
     { to: '/check', label: t('nav.check') || 'Check' },
     { to: '/reports', label: t('nav.reports') || 'Reports' },
-    { to: '/learn', label: 'Learn' },
+    { to: '/game', label: 'Game' },
     { to: '/community', label: 'Community' },
     { to: '/evidence', label: 'My Evidence' },
+    { to: '/admin', label: 'Admin' },
   ];
 
   const isActive = (path: string) => {

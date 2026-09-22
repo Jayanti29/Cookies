@@ -6,7 +6,9 @@ import { FindingCard } from './FindingCard';
 import { DemoLabel } from './DemoLabel';
 import { useLanguage } from '../i18n';
 import { api } from '../services/api';
-import { Bookmark, AlertTriangle, RotateCcw, Check, Share2 } from 'lucide-react';
+import { Bookmark, AlertTriangle, RotateCcw, Check, Share2, FileText } from 'lucide-react';
+import { ConsentReceiptModal } from './ConsentReceiptModal';
+import { ConsentReceipt } from '../types';
 import toast from 'react-hot-toast';
 
 export const ResultsScreen: React.FC<{ result: AnalysisResult }> = ({ result }) => {
@@ -14,6 +16,7 @@ export const ResultsScreen: React.FC<{ result: AnalysisResult }> = ({ result }) 
   const navigate = useNavigate();
   const [savingEvidence, setSavingEvidence] = useState(false);
   const [savedEvidence, setSavedEvidence] = useState(false);
+  const [showConsentReceipt, setShowConsentReceipt] = useState(false);
 
   const handleSaveEvidence = async () => {
     try {
@@ -60,11 +63,64 @@ export const ResultsScreen: React.FC<{ result: AnalysisResult }> = ({ result }) 
           {result.summary}
         </h2>
 
-        <p className="text-sm font-semibold text-stone-500">
+        <p className="text-sm font-semibold text-stone-500 mb-4">
           {result.totalFindings === 1
             ? t('result.foundOne') || 'We found 1 thing you should check.'
             : (t('result.foundItems', { count: result.totalFindings }) || `We found ${result.totalFindings} things you should check.`)}
         </p>
+
+        {/* Tri-Dimensional Summary Card: Money, Data, Manipulation */}
+        <div className="pt-4 border-t border-stone-100 text-left space-y-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400 block text-center">
+            What this website may ask from you
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div className="p-3 rounded-2xl bg-amber-50/60 border border-amber-200/70">
+              <span className="font-bold text-amber-950 flex items-center gap-1.5">
+                <span>💰</span>
+                <span>MONEY</span>
+              </span>
+              <p className="text-[11px] text-amber-900 mt-1">
+                {result.triDimensionSummary?.money?.count || (result.findings.filter(f => f.dimension === 'money').length) || 0} items to review
+              </p>
+            </div>
+            <div className="p-3 rounded-2xl bg-blue-50/60 border border-blue-200/70">
+              <span className="font-bold text-blue-950 flex items-center gap-1.5">
+                <span>🔐</span>
+                <span>DATA</span>
+              </span>
+              <p className="text-[11px] text-blue-900 mt-1">
+                {result.triDimensionSummary?.data?.count || (result.findings.filter(f => f.dimension === 'data').length) || 0} items to review
+              </p>
+            </div>
+            <div className="p-3 rounded-2xl bg-purple-50/60 border border-purple-200/70">
+              <span className="font-bold text-purple-950 flex items-center gap-1.5">
+                <span>🧠</span>
+                <span>MANIPULATION</span>
+              </span>
+              <p className="text-[11px] text-purple-900 mt-1">
+                {result.triDimensionSummary?.manipulation?.count || (result.findings.filter(f => f.dimension === 'manipulation').length) || 0} items to review
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Consent Receipt Trigger Banner */}
+      <div className="p-4 rounded-3xl bg-stone-900 text-white flex flex-wrap items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-2.5">
+          <div className="text-xl">🧾</div>
+          <div>
+            <span className="text-xs font-bold block">Digital Consent Receipt</span>
+            <span className="text-[11px] text-stone-400">Generate a human-readable summary of what you are asked to agree to</span>
+          </div>
+        </div>
+        <button
+          onClick={() => setShowConsentReceipt(true)}
+          className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs transition"
+        >
+          View Receipt
+        </button>
       </div>
 
       {/* Findings List */}
@@ -141,6 +197,33 @@ export const ResultsScreen: React.FC<{ result: AnalysisResult }> = ({ result }) 
       <p className="text-center text-xs text-stone-400 max-w-md mx-auto pt-2">
         COOKIES observations are based solely on the submitted evidence. Never consider any link or message 100% safe. Always verify independently.
       </p>
+
+      {/* Digital Consent Receipt Modal */}
+      {showConsentReceipt && (
+        <ConsentReceiptModal
+          receipt={
+            result.consentReceipt || {
+              receiptId: `rcpt_${result.id.slice(0, 8)}`,
+              website: result.inputPreview?.slice(0, 30) || 'checked-website.com',
+              timestamp: result.checkedAt,
+              observedChoices: {
+                essential: true,
+                analytics: result.findings.some((f) => f.dimension === 'data'),
+                advertising: result.findings.some((f) => f.dimension === 'data'),
+                thirdParty: result.findings.some((f) => f.dimension === 'data'),
+              },
+              observedInterfaceFlags: result.findings
+                .filter((f) => f.dimension === 'data' || f.dimension === 'manipulation')
+                .map((f) => f.title),
+              potentialImpact:
+                'You may be consenting to behavioral profile building, analytics recording, and marketing partner sharing across browsing sessions.',
+              verificationAdvice:
+                'Review the website\'s cookie preferences and privacy settings before consenting.',
+            }
+          }
+          onClose={() => setShowConsentReceipt(false)}
+        />
+      )}
     </div>
   );
 };

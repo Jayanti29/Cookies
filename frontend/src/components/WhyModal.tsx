@@ -45,18 +45,31 @@ export const WhyModal: React.FC<WhyModalProps> = ({ finding, onClose }) => {
           <div className="rounded-2xl bg-stone-50 p-4 border border-stone-150">
             <div className="flex items-center gap-2 text-stone-900 font-semibold text-sm mb-1.5">
               <Eye className="w-4 h-4 text-amber-700" />
-              <h4>{t('result.whatWeFound') || 'What we observed'}</h4>
+              <h4>{t('result.whatWeFound') || '1. What we observed'}</h4>
             </div>
             <p className="text-sm text-stone-700 leading-relaxed">
               {finding.evidence || finding.description}
             </p>
           </div>
 
-          {/* 2. Why it matters */}
+          {/* 2. Reasonable Interpretation */}
+          {finding.interpretation && (
+            <div className="rounded-2xl bg-stone-50 p-4 border border-stone-150">
+              <div className="flex items-center gap-2 text-stone-900 font-semibold text-sm mb-1.5">
+                <HelpCircle className="w-4 h-4 text-blue-700" />
+                <h4>2. Reasonable Interpretation</h4>
+              </div>
+              <p className="text-sm text-stone-700 leading-relaxed">
+                {finding.interpretation}
+              </p>
+            </div>
+          )}
+
+          {/* 3. Why it matters */}
           <div className="rounded-2xl bg-amber-50/70 p-4 border border-amber-100">
             <div className="flex items-center gap-2 text-amber-900 font-semibold text-sm mb-1.5">
               <AlertCircle className="w-4 h-4 text-amber-700" />
-              <h4>{t('result.whyItMatters') || 'Why it matters'}</h4>
+              <h4>{t('result.whyItMatters') || '3. Why it matters'}</h4>
             </div>
             <p className="text-sm text-amber-900 leading-relaxed">
               {finding.whyItMatters || finding.explanation}
