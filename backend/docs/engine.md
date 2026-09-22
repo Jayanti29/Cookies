@@ -1,0 +1,21 @@
+- feat(backend/engine): add AnalysisEngine central orchestrator\n
+- feat(backend/engine): add content type routing logic\n
+- feat(backend/engine): add website analysis routing\n
+- feat(backend/engine): add image/screenshot routing\n
+- feat(backend/engine): add document analysis routing\n
+- feat(backend/engine): add message/email routing\n
+- feat(backend/engine): add job offer routing\n
+- feat(backend/engine): add QR code routing\n
+- feat(backend/engine): add payment request routing\n
+- feat(backend/engine): add social media routing\n
+- feat(backend/engine): add analysisId generation per request\n
+- feat(backend/engine): add result persistence to Firestore\n
+- feat(backend/engine): add request timing and logging\n
+- feat(backend/engine): add demo mode detection\n
+- feat(backend/demo): add demo data for e-commerce scam\n
+- feat(backend/demo): add demo data for fake job offer\n
+- feat(backend/demo): add demo data for phishing message\n
+- feat(backend/demo): add demo data for Instagram giveaway\n
+- feat(backend/demo): add demo data for QR code analysis\n
+- feat(backend/demo): add demo data for payment request\n
+- feat(backend/demo): add isDemo flag to demo results\n

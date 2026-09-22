@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── USERS ──────────────────────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ── REPORTS (community) ───────────────────────────────────────────────────
+    match /reports/{reportId} {
+      // Anyone authenticated can read public reports
+      allow read: if request.auth != null;
+      // Only the owner can create
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.status == 'submitted';
+      // Only owner can update their own report (add evidence, etc.)
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+      // Owner can delete their own report
+      allow delete: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+    }
+
+    // ── COMMUNITY VOTES ───────────────────────────────────────────────────────
+    match /communityVotes/{voteId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+      // Prevent duplicate votes: one vote per user per report
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+    }
+
+    // ── EVIDENCE (private) ────────────────────────────────────────────────────
+    match /evidence/{evidenceId} {
+      // Only owner can access their own evidence
+      allow read, write, delete: if request.auth != null
+                                  && resource.data.ownerId == request.auth.uid;
+      allow create: if request.auth != null
+                    && request.resource.data.ownerId == request.auth.uid;
+    }
+
+    // ── SUBSCRIPTIONS (private) ───────────────────────────────────────────────
+    match /subscriptions/{subId} {
+      allow read, write, delete: if request.auth != null
+                                  && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+    }
+
+    // ── ANALYSIS RESULTS ──────────────────────────────────────────────────────
+    match /analysisResults/{resultId} {
+      allow read: if request.auth != null
+                  && (resource.data.userId == request.auth.uid
+                      || resource.data.isPublic == true);
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+      allow delete: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+    }
+
+    // ── WEBSITE PROFILES (public read, server write only) ────────────────────
+    match /websiteProfiles/{domain} {
+      allow read: if true; // Public
+      allow write: if false; // Server-side only (Firebase Admin)
+    }
+
+    // ── THREAT TRENDS (public read, server write only) ───────────────────────
+    match /threatTrends/{trendId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ── EDUCATIONAL CONTENT (public) ─────────────────────────────────────────
+    match /educationalContent/{contentId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ── DEFAULT: deny all ─────────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

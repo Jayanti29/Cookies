@@ -1,0 +1,32 @@
+- feat(frontend/components): add Layout with BottomNav + TopNav\n
+- feat(frontend/components): add BottomNav mobile navigation\n
+- feat(frontend/components): add TopNav desktop navigation\n
+- feat(frontend/components): add LanguageSelector dropdown\n
+- feat(frontend/components): add language switcher with flag emojis\n
+- feat(frontend/components): add StatusBadge with 5 status levels\n
+- feat(frontend/components): add safe status (green) styling\n
+- feat(frontend/components): add review status (yellow) styling\n
+- feat(frontend/components): add high concern status (red) styling\n
+- feat(frontend/components): add FindingCard component\n
+- feat(frontend/components): add severity badge in FindingCard\n
+- feat(frontend/components): add observed evidence display\n
+- feat(frontend/components): add recommended action display\n
+- feat(frontend/components): add Why button in FindingCard\n
+- feat(frontend/components): add WhyModal bottom sheet\n
+- feat(frontend/components): add WhyModal desktop panel\n
+- feat(frontend/components): add what we observed section\n
+- feat(frontend/components): add why it matters section\n
+- feat(frontend/components): add uncertainty section\n
+- feat(frontend/components): add what to verify section\n
+- feat(frontend/components): add AnalysisProgress loading screen\n
+- feat(frontend/components): add friendly progress steps animation\n
+- feat(frontend/components): add progressive checkmark animation\n
+- feat(frontend/components): add FileDropzone with react-dropzone\n
+- feat(frontend/components): add drag-and-drop visual feedback\n
+- feat(frontend/components): add file type validation in dropzone\n
+- feat(frontend/components): add ActionCard for home page\n
+- feat(frontend/components): add ActionCard hover animations\n
+- feat(frontend/components): add ResultsScreen reusable component\n
+- feat(frontend/components): add DemoLabel badge for demo data\n
+- feat(frontend/components): add PrivacyIndicator camera notice\n
+- feat(frontend/components): add useAnalysis hook for API calls\n

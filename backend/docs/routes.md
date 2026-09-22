@@ -1,0 +1,30 @@
+- feat(backend/routes): add POST /api/analyze universal endpoint\n
+- feat(backend/routes): add POST /api/analyze/website\n
+- feat(backend/routes): add POST /api/analyze/image with multer\n
+- feat(backend/routes): add POST /api/analyze/message\n
+- feat(backend/routes): add POST /api/analyze/job\n
+- feat(backend/routes): add POST /api/analyze/phishing\n
+- feat(backend/routes): add POST /api/analyze/payment\n
+- feat(backend/routes): add POST /api/analyze/qr\n
+- feat(backend/routes): add POST /api/analyze/url\n
+- feat(backend/routes): add POST /api/reports (auth required)\n
+- feat(backend/routes): add GET /api/reports (user reports)\n
+- feat(backend/routes): add GET /api/reports/community\n
+- feat(backend/routes): add POST /api/reports/:id/vote\n
+- feat(backend/routes): add POST /api/evidence (file upload)\n
+- feat(backend/routes): add GET /api/evidence (user evidence)\n
+- feat(backend/routes): add GET /api/evidence/:id\n
+- feat(backend/routes): add DELETE /api/evidence/:id\n
+- feat(backend/routes): add POST /api/subscriptions\n
+- feat(backend/routes): add GET /api/subscriptions\n
+- feat(backend/routes): add PUT /api/subscriptions/:id\n
+- feat(backend/routes): add DELETE /api/subscriptions/:id\n
+- feat(backend/routes): add GET /api/community/trending\n
+- feat(backend/routes): add GET /api/community/website/:domain\n
+- feat(backend/routes): add GET /api/community/reports\n
+- feat(backend/routes): add GET /health endpoint\n
+- feat(backend/routes): add authorization checks for private data\n
+- feat(backend/routes): add ownership validation for evidence\n
+- feat(backend/routes): add ownership validation for subscriptions\n
+- feat(backend/routes): add community vote deduplication\n
+- feat(backend/routes): add website profile aggregation\n

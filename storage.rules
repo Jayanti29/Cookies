@@ -1,0 +1,21 @@
+rules_service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Evidence: only owner can read/write
+    match /evidence/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null
+                         && request.auth.uid == userId;
+    }
+
+    // Reports: authenticated users can read public evidence, only owner writes
+    match /reports/{reportId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Default: deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

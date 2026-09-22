@@ -1,0 +1,64 @@
+- feat(frontend/pages): add Home page with hero section\n
+- feat(frontend/pages): add COOKIES logo and tagline to hero\n
+- feat(frontend/pages): add Check Something CTA button\n
+- feat(frontend/pages): add Scan Anything CTA button\n
+- feat(frontend/pages): add 6 action cards grid to home\n
+- feat(frontend/pages): add Check Website action card\n
+- feat(frontend/pages): add Scan Anything action card\n
+- feat(frontend/pages): add Check Job Offer action card\n
+- feat(frontend/pages): add Check Link/QR action card\n
+- feat(frontend/pages): add Check Message action card\n
+- feat(frontend/pages): add Report action card\n
+- feat(frontend/pages): add Not Sure tagline at bottom\n
+- feat(frontend/pages): add LanguageSelector to home hero\n
+- feat(frontend/pages): add UniversalChecker page\n
+- feat(frontend/pages): add paste link input option\n
+- feat(frontend/pages): add upload image option\n
+- feat(frontend/pages): add upload document option\n
+- feat(frontend/pages): add paste text option\n
+- feat(frontend/pages): add use camera option\n
+- feat(frontend/pages): add WebsiteScanner page\n
+- feat(frontend/pages): add URL input with https prefix\n
+- feat(frontend/pages): add Check Website submit button\n
+- feat(frontend/pages): add website analysis results display\n
+- feat(frontend/pages): add Camera page with getUserMedia\n
+- feat(frontend/pages): add camera permission request flow\n
+- feat(frontend/pages): add camera preview video element\n
+- feat(frontend/pages): add Camera Active indicator\n
+- feat(frontend/pages): add capture button (large circle)\n
+- feat(frontend/pages): add gallery fallback button\n
+- feat(frontend/pages): add privacy notice on camera\n
+- feat(frontend/pages): add LiveGuard page\n
+- feat(frontend/pages): add LIVE GUARD ON badge\n
+- feat(frontend/pages): add pulsing analysis indicator\n
+- feat(frontend/pages): add throttled frame analysis (5s)\n
+- feat(frontend/pages): add Stop Live Guard button\n
+- feat(frontend/pages): add QR detection overlay\n
+- feat(frontend/pages): add auto-stop on navigate away\n
+- feat(frontend/pages): add QRChecker page\n
+- feat(frontend/pages): add QR upload interface\n
+- feat(frontend/pages): add QR destination preview\n
+- feat(frontend/pages): add Check Destination primary action\n
+- feat(frontend/pages): add Cancel secondary action\n
+- feat(frontend/pages): add JobGuard page\n
+- feat(frontend/pages): add offer letter upload option\n
+- feat(frontend/pages): add screenshot upload option\n
+- feat(frontend/pages): add paste recruitment message option\n
+- feat(frontend/pages): add check job website option\n
+- feat(frontend/pages): add MessageChecker page\n
+- feat(frontend/pages): add message text input\n
+- feat(frontend/pages): add message screenshot upload\n
+- feat(frontend/pages): add platform selection chips\n
+- feat(frontend/pages): add PaymentAnalyzer page\n
+- feat(frontend/pages): add payment screenshot upload\n
+- feat(frontend/pages): add payment text input\n
+- feat(frontend/pages): add Results page with all result sections\n
+- feat(frontend/pages): add status badge at top of results\n
+- feat(frontend/pages): add findings count summary\n
+- feat(frontend/pages): add Save Evidence button\n
+- feat(frontend/pages): add Report button\n
+- feat(frontend/pages): add Check Again button\n
+- feat(frontend/pages): add View Technical Details toggle\n
+- feat(frontend/pages): add Auth page with email/password\n
+- feat(frontend/pages): add Google Sign In button\n
+- feat(frontend/pages): add sign in / sign up tabs\n

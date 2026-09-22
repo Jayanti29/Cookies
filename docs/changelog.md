@@ -1,0 +1,83 @@
+- test(backend): add test for dark pattern detection\n
+- test(backend): add test for fake job analysis\n
+- test(backend): add test for phishing detection\n
+- test(backend): add test for QR code decoding\n
+- test(backend): add test for translation service\n
+- test(backend): add test for missing AI service handling\n
+- test(backend): add test for invalid URL validation\n
+- test(backend): add test for unauthorized evidence access (403)\n
+- test(backend): add test for demo mode isolation\n
+- test(backend): verify no fake data fabrication\n
+- fix(backend): handle Gemini quota exceeded gracefully\n
+- fix(backend): improve Vision OCR error handling\n
+- fix(backend): fix URL validation for subdomains\n
+- fix(backend): fix rate limiting headers\n
+- fix(backend): improve response JSON parsing resilience\n
+- fix(frontend): fix camera stream cleanup on navigate away\n
+- fix(frontend): fix language selector persistence in localStorage\n
+- fix(frontend): fix mobile touch targets (min 44px)\n
+- fix(frontend): fix ResultsScreen overflow on small screens\n
+- fix(frontend): fix auth token refresh in API interceptor\n
+- perf(frontend): add lazy loading for all page components\n
+- perf(frontend): add React.memo to FindingCard\n
+- perf(frontend): optimize camera frame throttling\n
+- perf(backend): add response caching for website profiles\n
+- perf(backend): add Firestore query optimization\n
+- docs: update README with complete API reference\n
+- docs: add environment variable documentation\n
+- docs: add Firebase setup guide\n
+- docs: add contributing guidelines\n
+- docs: add security policy\n
+- chore: update dependencies to latest stable\n
+- chore: add TypeScript strict mode\n
+- chore: add ESLint configuration\n
+- chore: add Prettier configuration\n
+- chore: add pre-commit hooks\n
+- style: improve mobile navigation spacing\n
+- style: add smooth transitions to all modals\n
+- style: improve status badge accessibility\n
+- style: add focus rings for keyboard navigation\n
+- style: improve dark pattern card animations\n
+- a11y: add ARIA labels to all interactive elements\n
+- a11y: add keyboard navigation to language selector\n
+- a11y: add screen reader announcements for results\n
+- a11y: add high contrast mode support\n
+- a11y: add reduced motion media query\n
+- security: add Content-Security-Policy headers\n
+- security: add input sanitization for all text inputs\n
+- security: add file type double-validation\n
+- security: add rate limit for auth endpoints\n
+- security: verify Firebase rules block cross-user access\n
+- refactor(backend): extract common Gemini prompt builder\n
+- refactor(backend): unify error response format\n
+- refactor(frontend): extract common analysis form hook\n
+- refactor(frontend): consolidate status color utilities\n
+- feat: add privacy policy page\n
+- feat: add terms of service page\n
+- feat: add cookie consent banner\n
+- feat: add PWA manifest for mobile install\n
+- feat: add service worker for offline support\n
+- feat: add push notification support for subscription reminders\n
+- feat: add share to COOKIES deep link handler\n
+- feat(backend): add admin moderation endpoints\n
+- feat(backend): add report flagging for abuse\n
+- feat(backend): add educational content seeding\n
+- feat(frontend): add admin dashboard page\n
+- feat(frontend): add moderation queue view\n
+- feat(frontend): add trending threats visualization\n
+- feat(frontend): add scam pattern discovery page\n
+- feat(frontend): add Before You Pay checklist\n
+- feat(frontend): add Unsubscribe Helper guide\n
+- feat(frontend): add voice explain button (Gemini)\n
+- feat(frontend): add simple mode toggle (3 findings max)\n
+- feat(frontend): add detailed mode toggle\n
+- feat(frontend): add evidence highlighting overlay\n
+- feat(frontend): add QR destination preview card\n
+- feat(frontend): add impersonation check feature\n
+- feat(frontend): add link checker with redirect detection\n
+- refactor: improve monorepo workspace setup\n
+- docs: add architecture diagram to README\n
+- docs: add screen recording of camera scan flow\n
+- fix: final build verification (tsc + vite build)\n
+- chore: update CHANGELOG for v1.0 release\n
+- release: v1.0.0 - COOKIES Consumer Digital Safety Platform\n

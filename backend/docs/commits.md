@@ -1,0 +1,30 @@
+- feat(backend): initialize Express.js server with TypeScript\n
+- feat(backend): add CORS configuration for frontend\n
+- feat(backend): add helmet security headers middleware\n
+- feat(backend): add express-rate-limit for API protection\n
+- feat(backend): initialize Firebase Admin SDK\n
+- feat(backend): add Firestore database connection\n
+- feat(backend): add Firebase Storage configuration\n
+- feat(backend): add Firebase Authentication admin\n
+- feat(backend): initialize Google Gemini AI client\n
+- feat(backend): add gemini-1.5-flash model configuration\n
+- feat(backend): add TypeScript interfaces for AnalysisInput\n
+- feat(backend): add TypeScript interfaces for AnalysisResult\n
+- feat(backend): add TypeScript interfaces for Finding\n
+- feat(backend): add AnalysisType enum\n
+- feat(backend): add AnalysisStatus enum\n
+- feat(backend): add DarkPatternType enum\n
+- feat(backend): add Report document interface\n
+- feat(backend): add Evidence document interface\n
+- feat(backend): add Subscription document interface\n
+- feat(backend): add logger utility with structured logging\n
+- feat(backend): add UUID helper for generating analysis IDs\n
+- feat(backend): add URL validation helper\n
+- feat(backend): add base64 conversion utilities\n
+- feat(backend): add text sanitization helper\n
+- feat(backend): add Firebase token verification middleware\n
+- feat(backend): add optional auth middleware\n
+- feat(backend): add input validation middleware with Zod\n
+- feat(backend): add URL format validation schema\n
+- feat(backend): add text input validation (max 10000 chars)\n
+- feat(backend): add file upload validation (50MB, MIME types)\n

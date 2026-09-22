@@ -1,0 +1,41 @@
+# Environment
+.env
+.env.local
+.env.production
+*.env
+
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+*/dist/
+*/build/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Service account credentials
+*-service-account*.json
+google-credentials*.json
+serviceAccountKey.json
+
+# TypeScript
+*.tsbuildinfo

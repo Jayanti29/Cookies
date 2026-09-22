@@ -1,0 +1,30 @@
+- feat(frontend): initialize React 18 + Vite + TypeScript project\n
+- feat(frontend): configure Tailwind CSS with custom design system\n
+- feat(frontend): add Inter font with CSS variables\n
+- feat(frontend): configure PostCSS with autoprefixer\n
+- feat(frontend): add custom color palette (cookie golden, status colors)\n
+- feat(frontend): configure React Router v6 with all routes\n
+- feat(frontend): add Firebase client SDK initialization\n
+- feat(frontend): add Firebase Authentication configuration\n
+- feat(frontend): add Firestore client setup\n
+- feat(frontend): add Firebase Storage client setup\n
+- feat(frontend): add Zustand global state store\n
+- feat(frontend): add analysis results state management\n
+- feat(frontend): add user authentication state\n
+- feat(frontend): add language preference state\n
+- feat(frontend/i18n): add LanguageContext and Provider\n
+- feat(frontend/i18n): add useLanguage hook\n
+- feat(frontend/i18n): add translation lookup with English fallback\n
+- feat(frontend/i18n): add English translation file (60+ keys)\n
+- feat(frontend/i18n): add Hindi translation file\n
+- feat(frontend/i18n): add Kannada translation file\n
+- feat(frontend/i18n): add Tamil translation file\n
+- feat(frontend/i18n): add Telugu translation file\n
+- feat(frontend/i18n): add Bengali translation file\n
+- feat(frontend/i18n): add Marathi translation file\n
+- feat(frontend/i18n): add Malayalam translation file\n
+- feat(frontend): add Axios instance with Firebase auth interceptor\n
+- feat(frontend): add all API call functions\n
+- feat(frontend): add Firebase auth helper functions\n
+- feat(frontend): add useAuth custom hook\n
+- feat(frontend): add useCamera custom hook with getUserMedia\n

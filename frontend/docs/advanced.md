@@ -1,0 +1,63 @@
+- feat(frontend/pages): add ReportWizard 5-step wizard\n
+- feat(frontend/pages): add step 1 category selection cards\n
+- feat(frontend/pages): add step 2 description text area\n
+- feat(frontend/pages): add step 3 evidence upload\n
+- feat(frontend/pages): add step 4 date/time selection\n
+- feat(frontend/pages): add step 5 review and submit\n
+- feat(frontend/pages): add auto-generated report summary\n
+- feat(frontend/pages): add EvidenceVault page\n
+- feat(frontend/pages): add evidence cards grid view\n
+- feat(frontend/pages): add case number display\n
+- feat(frontend/pages): add evidence file count badges\n
+- feat(frontend/pages): add view evidence action\n
+- feat(frontend/pages): add add evidence action\n
+- feat(frontend/pages): add delete evidence with confirmation\n
+- feat(frontend/pages): add privacy notice in vault\n
+- feat(frontend/pages): add Dashboard personal safety page\n
+- feat(frontend/pages): add sites checked counter\n
+- feat(frontend/pages): add items analyzed counter\n
+- feat(frontend/pages): add reports submitted counter\n
+- feat(frontend/pages): add subscriptions tracked counter\n
+- feat(frontend/pages): add recent activity list\n
+- feat(frontend/pages): add Subscriptions watchdog page\n
+- feat(frontend/pages): add subscription card component\n
+- feat(frontend/pages): add days until renewal badge\n
+- feat(frontend/pages): add add subscription form\n
+- feat(frontend/pages): add edit subscription action\n
+- feat(frontend/pages): add delete subscription action\n
+- feat(frontend/pages): add renewal reminder toggle\n
+- feat(frontend/pages): add TrueCost calculator page\n
+- feat(frontend/pages): add base price input\n
+- feat(frontend/pages): add platform fee input\n
+- feat(frontend/pages): add tax input\n
+- feat(frontend/pages): add setup fee input\n
+- feat(frontend/pages): add renewal fee input\n
+- feat(frontend/pages): add billing frequency selector\n
+- feat(frontend/pages): add first payment calculation\n
+- feat(frontend/pages): add monthly cost calculation\n
+- feat(frontend/pages): add annual cost calculation\n
+- feat(frontend/pages): add not provided for missing fields\n
+- feat(frontend/pages): add Learn education page\n
+- feat(frontend/pages): add Hidden Fees dark pattern card\n
+- feat(frontend/pages): add Fake Urgency dark pattern card\n
+- feat(frontend/pages): add Hidden Subscriptions card\n
+- feat(frontend/pages): add Phishing education card\n
+- feat(frontend/pages): add Fake Jobs education card\n
+- feat(frontend/pages): add Impersonation education card\n
+- feat(frontend/pages): add interactive Can You Spot It quiz\n
+- feat(frontend/pages): add quiz correct answer explanation\n
+- feat(frontend/pages): add Community page\n
+- feat(frontend/pages): add trending reports section\n
+- feat(frontend/pages): add recent reports section\n
+- feat(frontend/pages): add community vote buttons\n
+- feat(frontend/pages): add empty state for no reports\n
+- feat(frontend/pages): add Profile settings page\n
+- feat(frontend/pages): add language selection in profile\n
+- feat(frontend/pages): add simple mode toggle\n
+- feat(frontend/pages): add accessibility options\n
+- feat(frontend/pages): add privacy information section\n
+- feat(frontend/pages): add delete account option\n
+- feat(frontend/pages): add sign out button\n
+- feat(frontend/pages): add Reports list page\n
+- feat(frontend/pages): add report status badges\n
+- feat(frontend/pages): add empty state with report CTA\n

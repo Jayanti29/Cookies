@@ -1,0 +1,63 @@
+- feat(backend/gemini): add GeminiService class\n
+- feat(backend/gemini): add system prompt for safety analyst\n
+- feat(backend/gemini): add no-hallucination instruction\n
+- feat(backend/gemini): add structured JSON response schema\n
+- feat(backend/gemini): add multimodal image analysis support\n
+- feat(backend/gemini): add multilingual response support\n
+- feat(backend/gemini): add retry logic for rate limits\n
+- feat(backend/gemini): add response validation\n
+- feat(backend/gemini): add error handling for unavailable service\n
+- feat(backend/gemini): add confidence score parsing\n
+- feat(backend/vision): add VisionService class\n
+- feat(backend/vision): add DOCUMENT_TEXT_DETECTION integration\n
+- feat(backend/vision): add base64 image processing\n
+- feat(backend/vision): add OCR text block extraction\n
+- feat(backend/vision): add graceful fallback when unavailable\n
+- feat(backend/vision): add Google Cloud Vision REST API call\n
+- feat(backend/translation): add TranslationService class\n
+- feat(backend/translation): add Google Cloud Translation v2\n
+- feat(backend/translation): add Hindi translation support\n
+- feat(backend/translation): add Kannada translation support\n
+- feat(backend/translation): add Tamil translation support\n
+- feat(backend/translation): add Telugu translation support\n
+- feat(backend/translation): add Bengali translation support\n
+- feat(backend/translation): add Marathi translation support\n
+- feat(backend/translation): add Malayalam translation support\n
+- feat(backend/translation): add fallback to original text\n
+- feat(backend/qr): add QRService class\n
+- feat(backend/qr): add QR code detection with jsqr\n
+- feat(backend/qr): add image preprocessing with sharp\n
+- feat(backend/qr): add destination extraction\n
+- feat(backend/qr): add graceful fallback when decode fails\n
+- feat(backend/website): add WebsiteAnalysisService\n
+- feat(backend/website): add URL fetch with axios\n
+- feat(backend/website): add HTML parsing with cheerio\n
+- feat(backend/website): add price extraction\n
+- feat(backend/website): add subscription keyword detection\n
+- feat(backend/website): add urgency keyword detection\n
+- feat(backend/website): add cancellation info extraction\n
+- feat(backend/website): add refund term extraction\n
+- feat(backend/website): add pre-selected option detection\n
+- feat(backend/jobguard): add JobGuardService class\n
+- feat(backend/jobguard): add company name extraction\n
+- feat(backend/jobguard): add email domain analysis\n
+- feat(backend/jobguard): add payment request detection\n
+- feat(backend/jobguard): add salary information parsing\n
+- feat(backend/jobguard): add urgency indicator detection\n
+- feat(backend/jobguard): add inconsistency detection\n
+- feat(backend/phishing): add PhishingAnalysisService\n
+- feat(backend/phishing): add urgency indicator detection\n
+- feat(backend/phishing): add credential request detection\n
+- feat(backend/phishing): add suspicious link detection\n
+- feat(backend/phishing): add impersonation indicator detection\n
+- feat(backend/phishing): add account threat detection\n
+- feat(backend/social): add SocialScamService\n
+- feat(backend/social): add giveaway scam detection\n
+- feat(backend/social): add fake sponsorship detection\n
+- feat(backend/social): add fake recruitment detection\n
+- feat(backend/social): add prize scam detection\n
+- feat(backend/payment): add PaymentAnalysisService\n
+- feat(backend/payment): add amount extraction\n
+- feat(backend/payment): add sender identification\n
+- feat(backend/payment): add urgency pattern detection\n
+- feat(backend/payment): add suspicious indicator analysis\n
