@@ -1,4 +1,4 @@
-import { geminiModel } from '../config/gemini';
+import { geminiModel, generateContentWithFailover } from '../config/gemini';
 import { AnalysisInput, AnalysisResult, AnalysisStatus, Finding } from '../types';
 import { generateId, stripDataURI, mimeFromDataURI } from '../utils/helpers';
 import { logger } from '../utils/logger';
@@ -145,12 +145,24 @@ export class GeminiService {
         parts.push({ text: prompt });
       }
 
-      const result = await geminiModel.generateContent({
-        contents: [{ role: 'user', parts }],
-        systemInstruction: SYSTEM_INSTRUCTION,
-      });
+      let responseText = '';
 
-      const responseText = result.response.text();
+      if (parts.some((p) => 'inlineData' in p)) {
+        // Multimodal image content
+        try {
+          const result = await geminiModel.generateContent({
+            contents: [{ role: 'user', parts }],
+            systemInstruction: SYSTEM_INSTRUCTION,
+          });
+          responseText = result.response.text();
+        } catch {
+          // Failover to text prompt without image if quota hit
+          responseText = await generateContentWithFailover(prompt, SYSTEM_INSTRUCTION);
+        }
+      } else {
+        responseText = await generateContentWithFailover(prompt, SYSTEM_INSTRUCTION);
+      }
+
       const parsed = parseGeminiResponse(responseText);
 
       const rawFindings = (parsed.findings as Finding[]) ?? [];

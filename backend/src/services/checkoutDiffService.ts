@@ -1,4 +1,4 @@
-import { geminiModel } from '../config/gemini';
+import { geminiModel, generateContentWithFailover } from '../config/gemini';
 import { CheckoutDiffResult, PriceDifferenceItem } from '../types';
 import { generateId, stripDataURI } from '../utils/helpers';
 import { logger } from '../utils/logger';
@@ -89,8 +89,43 @@ Return ONLY a JSON object matching this schema:
         createdAt: new Date().toISOString(),
       };
     } catch (err: any) {
-      logger.error({ service: 'checkoutDiff', error: String(err) }, 'Failed multimodal checkout diff analysis');
-      return this.heuristicFallback(analysisId);
+      logger.warn({ service: 'checkoutDiff', error: String(err) }, 'Multimodal Gemini failed, attempting text-only failover');
+      try {
+        const textPrompt = `You are COOKIES, a checkout price transparency auditor.
+Two screenshots were provided but vision analysis failed. Based on common dark patterns, generate a representative JSON analysis.
+
+Return ONLY a JSON object:
+{
+  "detectedPriceChange": true,
+  "advertisedPrice": "Unknown",
+  "checkoutPrice": "Unknown",
+  "currency": "INR",
+  "differences": [],
+  "observedDarkPatterns": ["Unable to verify — vision analysis unavailable"],
+  "summary": "Screenshots could not be analyzed via AI vision. Please manually compare the advertised price with the checkout total, looking for pre-selected add-ons, convenience fees, and hidden recurring charges.",
+  "uncertainties": ["AI vision unavailable for this request"],
+  "verificationSteps": ["Manually compare product listing price with checkout total", "Uncheck any pre-selected insurance or protection plans", "Look for small text mentioning recurring charges"]
+}`;
+        const text = await generateContentWithFailover(textPrompt);
+        const cleaned = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim();
+        const parsed = JSON.parse(cleaned);
+        return {
+          analysisId,
+          detectedPriceChange: Boolean(parsed.detectedPriceChange),
+          advertisedPrice: parsed.advertisedPrice || 'Not verified',
+          checkoutPrice: parsed.checkoutPrice || 'Not verified',
+          currency: parsed.currency || 'INR',
+          differences: parsed.differences || [],
+          observedDarkPatterns: parsed.observedDarkPatterns || [],
+          summary: parsed.summary || 'Analysis unavailable.',
+          uncertainties: parsed.uncertainties || [],
+          verificationSteps: parsed.verificationSteps || [],
+          createdAt: new Date().toISOString(),
+        };
+      } catch (fallbackErr: any) {
+        logger.error({ service: 'checkoutDiff', error: String(fallbackErr) }, 'All AI providers failed, using heuristic');
+        return this.heuristicFallback(analysisId);
+      }
     }
   }
 

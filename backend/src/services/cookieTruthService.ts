@@ -1,4 +1,4 @@
-import { geminiModel } from '../config/gemini';
+import { generateContentWithFailover } from '../config/gemini';
 import { CookieTruthResult, ConsentReceipt, CookieCategoryStatus, ConsentInterfaceFlag } from '../types';
 import { generateId } from '../utils/helpers';
 import { logger } from '../utils/logger';
@@ -73,8 +73,8 @@ export class CookieTruthService {
       });
     }
 
-    // AI Enrichment via Gemini 2.5 Flash if available
-    if (geminiModel && content.trim().length > 20) {
+    // AI Enrichment via failover chain (Gemini → Backup Gemini → Groq Key 1 → Groq Key 2)
+    if (content.trim().length > 20) {
       try {
         const prompt = `You are COOKIES, an expert digital consent intelligence auditor.
 Analyze the following observable cookie banner / consent notice from ${domain}.
@@ -106,8 +106,7 @@ Return ONLY a JSON object with this schema:
   ]
 }`;
 
-        const aiResponse = await geminiModel.generateContent(prompt);
-        const text = aiResponse.response.text();
+        const text = await generateContentWithFailover(prompt);
         const cleaned = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim();
         const parsed = JSON.parse(cleaned);
 
@@ -137,7 +136,7 @@ Return ONLY a JSON object with this schema:
           createdAt: new Date().toISOString(),
         };
       } catch (err) {
-        logger.warn({ service: 'cookieTruth', error: String(err) }, 'Gemini cookie analysis fallback to heuristic');
+        logger.warn({ service: 'cookieTruth', error: String(err) }, 'AI cookie analysis fallback to heuristic');
       }
     }
 

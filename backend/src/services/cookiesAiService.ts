@@ -1,4 +1,4 @@
-import { geminiModel } from '../config/gemini';
+import { geminiModel, generateContentWithFailover } from '../config/gemini';
 import { ChatRequest, ChatResponse } from '../types';
 import { logger } from '../utils/logger';
 
@@ -49,8 +49,7 @@ Return ONLY a JSON object matching this schema:
   "recommendedVerifications": ["string (practical checks for the user)"]
 }`;
 
-      const response = await geminiModel.generateContent(prompt);
-      const text = response.response.text();
+      const text = await generateContentWithFailover(prompt);
       const cleaned = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim();
       const parsed = JSON.parse(cleaned);
 
